@@ -1,38 +1,57 @@
-.App {
-  text-align: center;
+.post {
+  position: relative;
 }
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.btns {
+  position: absolute;
+  top: -25px;
+  right: -15px;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.btn {
+  padding: 10px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  border-radius: 50%;
+  margin: 5px;
+  transition: all 0.2s;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+.btn:hover {
+  transform: translateY(-2px) scale(1.2);
+}
+.deleteContainer {
+  transition: all 0.2s;
+}
+.deleteBtn.--active,
+.editBtn.--active {
+  border-radius: 5px;
+}
+.deleteBtn.--active {
+  background: rgb(211, 6, 6);
+}
+.editBtn.--active {
+  background: rgb(51, 51, 55);
+}
+.--active .btn {
+  margin-right: 0;
+}
+.deleteBtn {
+  background: rgb(211, 6, 6);
   color: white;
 }
-
-.App-link {
-  color: #61dafb;
+.confirmBtn,
+.cancelBtn {
+  padding: 5px;
+  font-size: 1.5rem;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.confirmBtn svg {
+  fill: green;
+}
+.cancelBtn svg {
+  fill: rgb(211, 6, 6);
+}
+.editBtn {
+  background: rgb(51, 51, 55);
+  color: white;
+}
+.btn svg {
+  fill: white;
 }
