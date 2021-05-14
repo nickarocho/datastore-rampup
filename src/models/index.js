@@ -7,9 +7,10 @@ const PostStatus = {
   "PUBLISHED": "PUBLISHED"
 };
 
-const { Post } = initSchema(schema);
+const { Post, Comment } = initSchema(schema);
 
 export {
   Post,
+  Comment,
   PostStatus
 };

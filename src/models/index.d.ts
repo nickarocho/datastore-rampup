@@ -13,7 +13,15 @@ export declare class Post {
   readonly status: PostStatus | keyof typeof PostStatus;
   readonly color?: string;
   readonly content?: string;
-  readonly votes?: number;
+  readonly comments?: (Comment | null)[];
   constructor(init: ModelInit<Post>);
   static copyOf(source: Post, mutator: (draft: MutableModel<Post>) => MutableModel<Post> | void): Post;
+}
+
+export declare class Comment {
+  readonly id: string;
+  readonly postID: string;
+  readonly content: string;
+  constructor(init: ModelInit<Comment>);
+  static copyOf(source: Comment, mutator: (draft: MutableModel<Comment>) => MutableModel<Comment> | void): Comment;
 }

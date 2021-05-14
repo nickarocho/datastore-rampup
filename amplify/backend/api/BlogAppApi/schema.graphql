@@ -1,13 +1,19 @@
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+}
+
 type Post @model {
   id: ID!
   title: String!
   status: PostStatus!
   color: String
   content: String
-  votes: Int
+  comments: [Comment] @connection(keyName: "byPost", fields: ["id"])
 }
 
-enum PostStatus {
-  DRAFT
-  PUBLISHED
+type Comment @model @key(name: "byPost", fields: ["postID", "content"]) {
+  id: ID!
+  postID: ID!
+  content: String!
 }

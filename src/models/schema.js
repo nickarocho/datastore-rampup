@@ -40,12 +40,19 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "votes": {
-                    "name": "votes",
-                    "isArray": false,
-                    "type": "Int",
+                "comments": {
+                    "name": "comments",
+                    "isArray": true,
+                    "type": {
+                        "model": "Comment"
+                    },
                     "isRequired": false,
-                    "attributes": []
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": "postID"
+                    }
                 }
             },
             "syncable": true,
@@ -54,6 +61,50 @@ export const schema = {
                 {
                     "type": "model",
                     "properties": {}
+                }
+            ]
+        },
+        "Comment": {
+            "name": "Comment",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "postID": {
+                    "name": "postID",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "content": {
+                    "name": "content",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                }
+            },
+            "syncable": true,
+            "pluralName": "Comments",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byPost",
+                        "fields": [
+                            "postID",
+                            "content"
+                        ]
+                    }
                 }
             ]
         }
@@ -68,5 +119,5 @@ export const schema = {
         }
     },
     "nonModels": {},
-    "version": "65074e20e4bc4aebdfc95091ed5b2eb0"
+    "version": "41af0d24842799b654e89bec043b509b"
 };
