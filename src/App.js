@@ -208,7 +208,7 @@ function App() {
   }
 
   return (
-    <div style={container}>
+    <div className="container">
       <Input
         onChange={handleSearchInput}
         name='search'
@@ -217,142 +217,150 @@ function App() {
         style={input}
       />
       <h1 style={heading}>Real Time Blog</h1>
-      <div style={{backgroundColor: formState.color, padding: 20}}>
-        <Input
-          onChange={onChange}
-          name='title'
-          placeholder='Post title'
-          value={formState.title}
-          style={input}
-        />
-        <TextArea
-          onChange={onChange}
-          name='content'
-          placeholder='Post content'
-          value={formState.content}
-          style={input}
-        />
-      </div>
-      <Select onChange={handleSelect} defaultValue={formState.status} name='status'>
-        <Option value="DRAFT">Draft</Option>
-        <Option value="PUBLISHED">Published</Option>
-      </Select>
-      <div>
-        <Button onClick={() => updateShowPicker(!showPicker)} style={button}>Toggle Color Picker</Button>
-        <p>Color: <span style={{ fontWeight: 'bold', color: formState.color }}>{formState.color}</span></p>
-      </div>
-      {
-        showPicker && <SketchPicker color={formState.color} onChange={onChange} />
-      }
-      <Button type='primary' onClick={createPost}>Create Post</Button>
-      {
-        posts.map(post => (
-          <>
-            <div
-              className="post"
-              key={post.id}
-              style={{
-                ...postStyle,
-                backgroundColor: (post.id === activePost.id && activePost.editEnabled) ? activePost.color : post.color
-              }}
-            >
-              <div className="btns">
-                <span className={`deleteBtn btn ${post.id === activePost.id && activePost.deleteEnabled ? '--active': ''}`}>
-                  {post.id === activePost.id && activePost.deleteEnabled ?
-                    <>
-                      <span>You sure, yo?</span>
-                      <CheckCircleOutlined data-type="delete" className="confirmBtn btn" onClick={() => handleDelete(post.id)} />
-                      <CloseCircleOutlined data-type="delete" className="cancelBtn btn" onClick={handleCancel} />
-                    </>
+      <div className="posts">
+
+        <div className="newPost">
+          <div style={{backgroundColor: formState.color, padding: 20}}>
+            <Input
+              onChange={onChange}
+              name='title'
+              placeholder='Post title'
+              value={formState.title}
+              style={input}
+            />
+            <TextArea
+              onChange={onChange}
+              name='content'
+              placeholder='Post content'
+              value={formState.content}
+              style={input}
+            />
+          </div>
+          <Select onChange={handleSelect} defaultValue={formState.status} name='status'>
+            <Option value="DRAFT">Draft</Option>
+            <Option value="PUBLISHED">Published</Option>
+          </Select>
+          <div>
+            <Button onClick={() => updateShowPicker(!showPicker)} style={button}>Toggle Color Picker</Button>
+            <p>Color: <span style={{ fontWeight: 'bold', color: formState.color }}>{formState.color}</span></p>
+          </div>
+          {
+            showPicker && <SketchPicker color={formState.color} onChange={onChange} />
+          }
+          <Button type='primary' onClick={createPost}>Create Post</Button>
+        </div>
+        {
+          posts.map(post => (
+            <>
+              <div className="post">
+                <div
+                  className="postContent"
+                  key={post.id}
+                  style={{
+                    ...postStyle,
+                    backgroundColor: (post.id === activePost.id && activePost.editEnabled) ? activePost.color : post.color
+                  }}
+                >
+                  <div className="btns">
+                    <span className={`deleteBtn btn ${post.id === activePost.id && activePost.deleteEnabled ? '--active': ''}`}>
+                      {post.id === activePost.id && activePost.deleteEnabled ?
+                        <>
+                          <span>You sure, yo?</span>
+                          <CheckCircleOutlined data-type="delete" className="confirmBtn btn" onClick={() => handleDelete(post.id)} />
+                          <CloseCircleOutlined data-type="delete" className="cancelBtn btn" onClick={handleCancel} />
+                        </>
+                        :
+                        <DeleteOutlined data-post-id={post.id} onClick={confirmDelete} />
+                      }
+                    </span>
+                    <span className={`editBtn btn ${post.id === activePost.id && activePost.editEnabled ? '--active': ''}`}>
+                      {post.id === activePost.id && activePost.editEnabled ?
+                        <>
+                          <span>Save your changes?</span>
+                          <CheckCircleOutlined data-type="edit" className="confirmBtn btn" onClick={() => handleUpdate(post.id)} />
+                          <CloseCircleOutlined data-type="edit" className="cancelBtn btn" onClick={handleCancel} />
+                        </>
+                      :
+                      <EditOutlined data-post-id={post.id} onClick={activateEdit} />
+                      }
+                    </span>
+                  </div>
+                    {post.id === activePost.id && activePost.editEnabled ? 
+                      <>
+                        <div>
+                            <Input
+                              onChange={onEditChange}
+                              name='title'
+                              placeholder='Post title'
+                              value={activePost.title}
+                            />
+                            <TextArea
+                              onChange={onEditChange}
+                              name='content'
+                              placeholder='Post content'
+                              value={activePost.content}
+                            />
+                          </div>
+                          <Select defaultValue={activePost.status} name='status'>
+                            <Option value="DRAFT">Draft</Option>
+                            <Option value="PUBLISHED">Published</Option>
+                          </Select>
+                          <div>
+                            <Button onClick={() => updateShowPicker(!showPicker)} style={button}>Toggle Color Picker</Button>
+                        </div>
+                        {
+                          showPicker && <SketchPicker color={activePost.color} onChange={onEditChange} />
+                        }
+                      </>
                     :
-                    <DeleteOutlined data-post-id={post.id} onClick={confirmDelete} />
+                      <div style={postBg}>
+                          <h3 style={postTitle}>{post.title}</h3>
+                          <p style={postTitle}>{post.content}</p>
+                          <p style={postTitle}>{post.status}</p>
+                      </div>
                   }
-                </span>
-                <span className={`editBtn btn ${post.id === activePost.id && activePost.editEnabled ? '--active': ''}`}>
-                  {post.id === activePost.id && activePost.editEnabled ?
-                    <>
-                      <span>Save your changes?</span>
-                      <CheckCircleOutlined data-type="edit" className="confirmBtn btn" onClick={() => handleUpdate(post.id)} />
-                      <CloseCircleOutlined data-type="edit" className="cancelBtn btn" onClick={handleCancel} />
-                    </>
-                  :
-                  <EditOutlined data-post-id={post.id} onClick={activateEdit} />
-                  }
-                </span>
+                </div>
+                <div
+                  className="postComments"
+                  style={{
+                  border: `30px solid ${(post.id === activePost.id && activePost.editEnabled) ? activePost.color : post.color}`,
+                  padding: '1em'
+                }}>
+                  <h5>Comments ({post.comments.length})</h5>
+                  <ul>
+                  {post.comments.map(comment => (
+                    <li key={comment.id}>
+                      {comment.content}
+                    </li>
+                  ))}
+                  </ul>
+                  <TextArea
+                    onChange={updatePostComment}
+                    onFocus={() => {updateActivePost({...activePost, id: post.id})}}
+                    name='comment'
+                    placeholder={`Express yo'self...`}
+                    value={post.draftedComment}
+                    style={input}
+                    data-post-id={post.id}
+                  />
+                  <Button type="primary" htmlType="submit" data-post-id={post.id} onClick={handleSubmitComment}>
+                    Comment
+                  </Button>
+                </div>
               </div>
-                {post.id === activePost.id && activePost.editEnabled ? 
-                  <>
-                  <div>
-                      <Input
-                        onChange={onEditChange}
-                        name='title'
-                        placeholder='Post title'
-                        value={activePost.title}
-                      />
-                      <TextArea
-                        onChange={onEditChange}
-                        name='content'
-                        placeholder='Post content'
-                        value={activePost.content}
-                      />
-                    </div>
-                    <Select defaultValue={activePost.status} name='status'>
-                      <Option value="DRAFT">Draft</Option>
-                      <Option value="PUBLISHED">Published</Option>
-                    </Select>
-                    <div>
-                      <Button onClick={() => updateShowPicker(!showPicker)} style={button}>Toggle Color Picker</Button>
-                  </div>
-                  {
-                    showPicker && <SketchPicker color={activePost.color} onChange={onEditChange} />
-                  }
-                  </>
-                :
-                  <div style={postBg}>
-                      <h3 style={postTitle}>{post.title}</h3>
-                      <p style={postTitle}>{post.content}</p>
-                      <p style={postTitle}>{post.status}</p>
-                  </div>
-              }
-            </div>
-            <div style={{
-              border: `30px solid ${(post.id === activePost.id && activePost.editEnabled) ? activePost.color : post.color}`,
-              padding: '1em'
-            }}>
-              <h5>Comments ({post.comments.length})</h5>
-              <ul>
-              {post.comments.map(comment => (
-                <li key={comment.id}>
-                  {comment.content}
-                </li>
-              ))}
-              </ul>
-              <TextArea
-                onChange={updatePostComment}
-                onFocus={() => {updateActivePost({...activePost, id: post.id})}}
-                name='comment'
-                placeholder={`Express yo'self...`}
-                value={post.draftedComment}
-                style={input}
-                data-post-id={post.id}
-              />
-              <Button type="primary" htmlType="submit" data-post-id={post.id} onClick={handleSubmitComment}>
-                Comment
-              </Button>
-            </div>
-          </>
-        ))
-      }
+            </>
+          ))
+        }
+      </div>
     </div>
   )
 }
 
-const container = { width: '100%', padding: 40, maxWidth: 900 };
 const input = { marginBottom: 10 };
 const button = { marginBottom: 10 };
 const heading = { fontWeight: 'normal', fontSize: 40 };
 const postBg = { backgroundColor: 'white' };
-const postStyle = { padding: '30px', marginTop: 70 };
+const postStyle = { padding: '30px' };
 const postTitle = { margin: 0, padding: 9, fontSize: 20 };
 
 export default App;
