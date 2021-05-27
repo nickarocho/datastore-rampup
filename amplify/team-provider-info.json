@@ -10,6 +10,11 @@
       "StackName": "amplify-datastorealex-dev-105437",
       "StackId": "arn:aws:cloudformation:us-west-2:947511734122:stack/amplify-datastorealex-dev-105437/f5edcda0-b281-11eb-a615-06d3cec249cb",
       "AmplifyAppId": "d1bgzkwoatyab9"
+    },
+    "categories": {
+      "auth": {
+        "datastorealexaa8370c5": {}
+      }
     }
   }
 }

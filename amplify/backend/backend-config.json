@@ -16,5 +16,14 @@
         }
       }
     }
-  }
+  },
+  "auth": {
+    "datastorealexaa8370c5": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
+    }
+  },
+  "analytics": {}
 }

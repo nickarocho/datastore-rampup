@@ -388,11 +388,9 @@ function App() {
                 ) : (
                   <div style={postBg}>
                     <h3 style={postTitle}>{post.title}</h3>
-                    <p style={postTitle}>
-                      content: {JSON.stringify(post.content)}
-                    </p>
+                    <p style={postTitle}>{post.content}</p>
                     <p style={postTitle}>{post.status}</p>
-                    <p>color: {JSON.stringify(post.color)}</p>
+                    <p>{post.color}</p>
                   </div>
                 )}
               </div>
