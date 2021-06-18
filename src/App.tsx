@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import { SketchPicker } from "react-color";
-import { DataStore } from "@aws-amplify/datastore";
+import { DataStore, syncExpression } from "@aws-amplify/datastore";
 import { Post, Comment } from "./models";
 import TextArea from "antd/lib/input/TextArea";
 import { Input, Button, Select } from "antd";
@@ -11,6 +11,15 @@ import {
   CheckCircleOutlined,
   CloseCircleOutlined,
 } from "@ant-design/icons";
+
+// DataStore.configure({
+//   syncExpressions: [
+//     syncExpression(Comment, (): any => {
+//       // @ts-ignore
+//       return (comment: any) => comment.isVerified("eq", true);
+//     }),
+//   ],
+// });
 
 const { Option } = Select;
 
@@ -39,11 +48,23 @@ function App() {
 
   useEffect(() => {
     fetchPosts();
-    const postSubscription = DataStore.observe(Post).subscribe(() =>
-      fetchPosts()
-    );
-    const commentSubscription = DataStore.observe(Comment).subscribe(() =>
-      fetchPosts()
+    const postSubscription = DataStore.observe(Post).subscribe(async () => {
+      try {
+        fetchPosts();
+      } catch (err) {
+        console.log("oh noooo");
+      }
+    });
+    const commentSubscription = DataStore.observe(Comment).subscribe(
+      async () => {
+        try {
+          const data = await DataStore.query(Comment);
+          console.log(data);
+          fetchPosts();
+        } catch (err) {
+          console.log(err);
+        }
+      }
     );
     return () => {
       postSubscription.unsubscribe();
@@ -189,17 +210,35 @@ function App() {
     try {
       const postID = e.currentTarget.dataset.postId;
       // just clears the form
-      // updateActivePost({...activePost, draftedComment: ''})
       const postIndex = posts.findIndex((post) => post.id === postID);
       await DataStore.save(
         new Comment({
           content: posts[postIndex]["draftedComment"],
           postID,
+          isVerified: false,
         })
       );
-      // fetchPosts();
     } catch (err) {
       console.error("something went wrong with handleSubmitComment:", err);
+    }
+  }
+
+  async function handleCommentVerification(e: any) {
+    try {
+      const commentId = e.currentTarget.dataset.commentId;
+      const isVerified = e.currentTarget.checked;
+
+      const original = (await DataStore.query(Comment, commentId)) as Comment;
+      await DataStore.save(
+        Comment.copyOf(original, (updated) => {
+          updated.isVerified = isVerified;
+        })
+      ).then((updated: any) => console.log({ updated }));
+    } catch (err) {
+      console.error(
+        "something went wrong with handleCommentVerification:",
+        err
+      );
     }
   }
 
@@ -407,7 +446,18 @@ function App() {
                 <h5>Comments ({post.comments.length})</h5>
                 <ul>
                   {post.comments.map((comment: Comment) => (
-                    <li key={comment.id}>{comment.content}</li>
+                    <li key={comment.id}>
+                      {comment.content}{" "}
+                      <span>
+                        <input
+                          type="checkbox"
+                          data-comment-id={comment.id}
+                          onChange={handleCommentVerification}
+                          checked={comment.isVerified}
+                        ></input>
+                        <small> (verify)</small>
+                      </span>
+                    </li>
                   ))}
                 </ul>
                 <TextArea

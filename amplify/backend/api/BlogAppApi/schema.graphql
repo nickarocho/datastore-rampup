@@ -16,4 +16,5 @@ type Comment @model @key(name: "byPost", fields: ["postID", "content"]) {
   id: ID!
   postID: ID!
   content: String!
+  isVerified: Boolean!
 }

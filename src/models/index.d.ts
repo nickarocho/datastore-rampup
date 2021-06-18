@@ -24,6 +24,7 @@ export declare class Comment {
   readonly id: string;
   readonly postID: string;
   readonly content: string;
+  readonly isVerified: boolean;
   readonly createdAt?: string;
   readonly updatedAt?: string;
   constructor(init: ModelInit<Comment>);

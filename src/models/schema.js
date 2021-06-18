@@ -104,6 +104,13 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
+                "isVerified": {
+                    "name": "isVerified",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": true,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -151,5 +158,5 @@ export const schema = {
         }
     },
     "nonModels": {},
-    "version": "780119451a8cad2f98e98d86b241f448"
+    "version": "aaf5bc669948350e5417cd2dd0a73b93"
 };
