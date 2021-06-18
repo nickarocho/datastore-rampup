@@ -105,14 +105,13 @@ function App() {
     if (!id) {
       console.error("No Post ID passed to handleUpdate");
     }
-
     try {
       const original = (await DataStore.query(Post, id)) as Post;
       await DataStore.save(
         Post.copyOf(original, (updated) => {
           Object.assign(updated, activePost);
         })
-      ).then((updated) => console.log({ updated }));
+      ).then((updated: any) => console.log({ updated }));
     } catch (err) {
       console.error("something went wrong with handleUpdate", err);
     }
@@ -155,10 +154,10 @@ function App() {
 
       // merge Post model with Comment model
       Promise.all(
-        posts.map(async (post) => {
+        posts.map(async (post: any) => {
           let id = post.id;
           const comments = (await DataStore.query(Comment)).filter(
-            (c) => c.postID === id
+            (c: any) => c.postID === id
           );
           return { ...post, comments };
         })
@@ -225,7 +224,7 @@ function App() {
         value={searchQuery}
         style={input}
       />
-      <h1 style={heading}>Real Time Blog</h1>
+      <h1 style={heading}>Datastore is cool</h1>
       <div className="posts">
         <div className="newPost">
           <div style={{ backgroundColor: formState.color, padding: 20 }}>
